@@ -9,7 +9,7 @@ const useGetSuggestedUsers = () => {
     const fetchSuggestedUsers = async () => {
       try {
         const res = await axios.get(
-          "https://sharp-educationmedia.onrender.com/api/v1/user/suggested",
+          "http://localhost:8003/api/v1/user/suggested",
           { withCredentials: true }
         );
         if (res.data.success) {

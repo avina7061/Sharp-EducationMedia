@@ -37,7 +37,7 @@ const CreatePost = ({ open, setOpen }) => {
     try {
       setLoading(true);
       const res = await axios.post(
-        "https://sharp-educationmedia.onrender.com/api/v1/post/addpost",
+        "http://localhost:8003/api/v1/post/addpost",
         formData,
         {
           headers: {

@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon backend/index.js",
     "build": "npm install",
-    "start": "node backend/index.js"  // Added start script
+    "start": "node backend/index.js"  
   },
   "keywords": [],
   "author": "",

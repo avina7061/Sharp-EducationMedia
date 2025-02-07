@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import getDataUri from "../utils/datauri.js";
 import cloudinary from "../utils/cloudinary.js";
-import Post from "../models/post.model.js";
+import Post from "../models/Post.model.js";
 import { getReceiverSocketId, io } from "../socket/socket.js";
 export const register = async (req, res) => {
   try {

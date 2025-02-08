@@ -11,26 +11,34 @@ import path from "path";
 
 dotenv.config();
 
-const PORT = process.env.PORT || 3000;
-
+const PORT = process.env.PORT || 8003;
 const __dirname = path.resolve();
+
+// Define Allowed Origins (Local + Production)
+const allowedOrigins = [
+  "http://localhost:5173", // Local frontend (Vite, change if needed)
+  "http://localhost:8003", // Local frontend (React default)
+  "https://sharp-educationmedia.onrender.com", // Production frontend
+];
+
+// CORS Middleware
+const corsOptions = {
+  origin: allowedOrigins,
+  credentials: true, // Allow cookies
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+app.use(cors(corsOptions));
 
 // Middlewares
 app.use(express.json());
-app.use(cookieParser()); // Cookie parser middleware
+app.use(cookieParser());
 app.use(urlencoded({ extended: true }));
 
-const corsOptions = {
-  origin: process.env.URL,
-  credentials: true,
-};
-
-app.use(cors(corsOptions));
-
-// Log cookies on every request (you can remove this after debugging)
-app.use((req, res, next) => {
-  console.log("Cookies:", req.cookies); // Logs cookies in the request
-  next(); // Make sure to call next to move to the next middleware/route
+// Debugging: Log Cookies on User Routes
+app.use("/api/v1/user", (req, res, next) => {
+  console.log("Cookies at user route:", req.cookies);
+  next();
 });
 
 // API Routes
@@ -38,17 +46,17 @@ app.use("/api/v1/user", userRoute);
 app.use("/api/v1/post", postRoute);
 app.use("/api/v1/message", messageRoute);
 
-// Serve frontend assets (if any)
+// Serve frontend assets
 app.use(express.static(path.join(__dirname, "/frontend/dist")));
 app.get("*", (req, res) => {
   res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
 });
 
-// Start the server with DB connection
+// Connect to Database & Start Server
 connectDB()
   .then(() => {
     server.listen(PORT, () => {
-      console.log(`Server listening on port ${PORT}`);
+      console.log(`Server running on port ${PORT}`);
     });
   })
   .catch((err) => {

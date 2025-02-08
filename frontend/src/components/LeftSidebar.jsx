@@ -37,7 +37,7 @@ const LeftSidebar = () => {
   const logoutHandler = async () => {
     try {
       const res = await axios.get(
-        "sharp-educationmedia.onrender/api/v1/user/logout",
+        "https://sharp-educationmedia.onrender.com/api/v1/user/logout",
         {
           withCredentials: true,
         }

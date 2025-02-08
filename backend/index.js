@@ -15,10 +15,11 @@ const PORT = process.env.PORT || 3000;
 
 const __dirname = path.resolve();
 
-//middlewares
+// Middlewares
 app.use(express.json());
-app.use(cookieParser());
+app.use(cookieParser()); // Cookie parser middleware
 app.use(urlencoded({ extended: true }));
+
 const corsOptions = {
   origin: process.env.URL,
   credentials: true,
@@ -26,21 +27,24 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-// yha pr apni api ayengi
+// Log cookies on every request (you can remove this after debugging)
+app.use((req, res, next) => {
+  console.log("Cookies:", req.cookies); // Logs cookies in the request
+  next(); // Make sure to call next to move to the next middleware/route
+});
+
+// API Routes
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/post", postRoute);
 app.use("/api/v1/message", messageRoute);
 
+// Serve frontend assets (if any)
 app.use(express.static(path.join(__dirname, "/frontend/dist")));
 app.get("*", (req, res) => {
   res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
 });
 
-// server.listen(PORT, () => {
-//   connectDB();
-//   console.log(`Server listen at port ${PORT}`);
-// });
-
+// Start the server with DB connection
 connectDB()
   .then(() => {
     server.listen(PORT, () => {

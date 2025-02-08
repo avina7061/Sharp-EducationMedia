@@ -1,28 +1,20 @@
-import { setPosts } from "@/redux/postSlice";
-import axios from "axios";
+import { setMessages } from "@/redux/chatSlice";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-
-const useGetAllPost = () => {
+import { useDispatch, useSelector } from "react-redux";
+import { setRealTimeMessage } from "@/redux/rtnMessage";
+const useGetRTM = () => {
   const dispatch = useDispatch();
+  const { socket } = useSelector((store) => store.socketio);
+  const { messages } = useSelector((store) => store.chat);
   useEffect(() => {
-    const fetchAllPost = async () => {
-      try {
-        const res = await axios.get(
-          "https://sharp-educationmedia.onrender.com/api/v1/post/all",
-          {
-            withCredentials: true,
-          }
-        );
-        if (res.data.success) {
-          // console.log("Hooks post " + res.data.posts);
-          dispatch(setPosts(res.data.posts));
-        }
-      } catch (error) {
-        console.log(error);
-      }
+    socket?.on("newMessage", (newMessage) => {
+      dispatch(setMessages([...messages, newMessage]));
+      dispatch(setRealTimeMessage(newMessage));
+    });
+
+    return () => {
+      socket?.off("newMessage");
     };
-    fetchAllPost();
-  }, []);
+  }, [messages, setMessages]);
 };
-export default useGetAllPost;
+export default useGetRTM;

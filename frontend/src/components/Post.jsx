@@ -121,7 +121,7 @@ const Post = ({ post }) => {
   const deletePostHandler = async () => {
     try {
       const res = await axios.delete(
-        `http://localhost:8003/api/v1/post/delete/${post?._id}`,
+        `http://localhost:8003/v1/post/delete/${post?._id}`,
         { withCredentials: true }
       );
       if (res.data.success) {
@@ -145,7 +145,7 @@ const Post = ({ post }) => {
 
     try {
       const res = await axios.get(
-        `https://sharp-educationmedia.onrender.com/api/v1/post/${post?._id}/bookmark`,
+        `http://localhost:8003/api/v1/post/${post?._id}/bookmark`,
         { withCredentials: true }
       );
       if (res.data.success) {

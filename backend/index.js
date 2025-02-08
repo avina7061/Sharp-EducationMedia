@@ -12,49 +12,41 @@ import path from "path";
 dotenv.config();
 
 const PORT = process.env.PORT || 3000;
+
 const __dirname = path.resolve();
 
-// Middleware
+//middlewares
 app.use(express.json());
 app.use(cookieParser());
 app.use(urlencoded({ extended: true }));
-
-// ✅ CORS Fix: Ensure the correct frontend URL is allowed
 const corsOptions = {
-  origin: process.env.URL || "https://sharp-educationmedia.onrender.com",
-  credentials: true, // Allow cookies and authentication headers
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+  origin: process.env.URL,
+  credentials: true,
 };
 
 app.use(cors(corsOptions));
 
-// ✅ Debugging Middleware: Log requests to check headers and cookies
-app.use((req, res, next) => {
-  console.log("Incoming Request:", req.method, req.url);
-  console.log("Headers:", req.headers);
-  console.log("Cookies:", req.cookies);
-  next();
-});
-
-// ✅ Routes
+// yha pr apni api ayengi
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/post", postRoute);
 app.use("/api/v1/message", messageRoute);
 
-// ✅ Serve Frontend
 app.use(express.static(path.join(__dirname, "/frontend/dist")));
 app.get("*", (req, res) => {
   res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
 });
 
-// ✅ Start Server After Connecting to Database
+// server.listen(PORT, () => {
+//   connectDB();
+//   console.log(`Server listen at port ${PORT}`);
+// });
+
 connectDB()
   .then(() => {
     server.listen(PORT, () => {
-      console.log(`✅ Server listening on port ${PORT}`);
+      console.log(`Server listening on port ${PORT}`);
     });
   })
   .catch((err) => {
-    console.error("❌ Database connection failed:", err);
+    console.error("Database connection failed", err);
   });

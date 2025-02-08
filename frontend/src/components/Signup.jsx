@@ -26,7 +26,7 @@ const Signup = () => {
     try {
       setLoading(true);
       const res = await axios.post(
-        "https://sharp-educationmedia.onrender.com/api/v1/user/register",
+        "http://localhost:8003/api/v1/user/register",
         input,
         {
           headers: {

@@ -8,7 +8,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: process.env.URL || "https://sharp-educationmedia.onrender.com/",
+    origin: process.env.URL,
     methods: ["GET", "POST"],
   },
 });

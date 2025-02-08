@@ -36,12 +36,18 @@ const LeftSidebar = () => {
 
   const logoutHandler = async () => {
     try {
+<<<<<<< HEAD
       const res = await axios.get(
         "https://sharp-educationmedia.onrender.com/api/v1/user/logout",
         {
           withCredentials: true,
         }
       );
+=======
+      const res = await axios.get("sharp-educationmedia.onrender/api/v1/user/logout", {
+        withCredentials: true,
+      });
+>>>>>>> 42380bd46cf133ebe2be4d1fb759f6efc7b16a50
       if (res.data.success) {
         dispatch(setAuthUser(null));
         dispatch(setSelectedPost(null));

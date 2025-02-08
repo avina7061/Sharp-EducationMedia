@@ -17,28 +17,13 @@ const __dirname = path.resolve();
 
 // Middlewares
 app.use(express.json());
-
-app.use(
-  cookieParser({
-    secure: true,
-    sameSite: "none",
-    domain: ".onrender.com",
-  })
-);
+app.use(cookieParser()); // Cookie parser middleware
 app.use(urlencoded({ extended: true }));
 
 const corsOptions = {
-  origin:
-    process.env.NODE_ENV === "production"
-      ? "https://sharp-educationmedia.onrender.com"
-      : "http://localhost:5173",
+  origin: process.env.URL,
   credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  exposedHeaders: ["set-cookie"],
 };
-
-app.use(cors(corsOptions));
 
 app.use(cors(corsOptions));
 

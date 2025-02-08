@@ -145,7 +145,7 @@ const Post = ({ post }) => {
 
     try {
       const res = await axios.get(
-        `http://localhost:8003/api/v1/post/${post?._id}/bookmark`,
+        `https://sharp-educationmedia.onrender.com/api/v1/post/${post?._id}/bookmark`,
         { withCredentials: true }
       );
       if (res.data.success) {

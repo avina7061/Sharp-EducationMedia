@@ -82,7 +82,7 @@ function App() {
     if (user) {
       // Check if there is a logged-in user
       // Establish socket connection to the server with the user's ID
-      const socketio = io("http://localhost:8003", {
+      const socketio = io(window.location.origin, {
         query: { userId: user?._id }, // Pass the user's ID to the server via query params
         transports: ["websocket"], // Use WebSocket transport
       });

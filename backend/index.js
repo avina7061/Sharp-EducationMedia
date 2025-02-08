@@ -21,9 +21,8 @@ app.use(cookieParser()); // Cookie parser middleware
 app.use(urlencoded({ extended: true }));
 
 const corsOptions = {
-  origin: process.env.URL || "https://sharp-educationmedia.onrender.com",
+  origin: process.env.URL,
   credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE"],
 };
 
 app.use(cors(corsOptions));

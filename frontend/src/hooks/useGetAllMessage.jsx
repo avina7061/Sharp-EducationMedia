@@ -8,9 +8,12 @@ const useGetAllPost = () => {
   useEffect(() => {
     const fetchAllPost = async () => {
       try {
-        const res = await axios.get("http://localhost:8003/api/v1/post/all", {
-          withCredentials: true,
-        });
+        const res = await axios.get(
+          "https://sharp-educationmedia.onrender.com/api/v1/post/all",
+          {
+            withCredentials: true,
+          }
+        );
         if (res.data.success) {
           // console.log("Hooks post " + res.data.posts);
           dispatch(setPosts(res.data.posts));

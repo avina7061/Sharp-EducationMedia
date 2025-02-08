@@ -1,37 +1,49 @@
 import { Server } from "socket.io";
 import express from "express";
 import http from "http";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express();
-
 const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: process.env.URL || "https://educationmedia.onrender.com/",
+    origin: process.env.URL || "https://sharp-educationmedia.onrender.com",
     methods: ["GET", "POST"],
+    credentials: true, // Allow cookies & authentication
   },
 });
 
-const userSocketMap = {}; // this map stores socket id corresponding the user id; userId -> socketId
+const userSocketMap = {}; // Store userId -> socketId
 
 export const getReceiverSocketId = (receiverId) => userSocketMap[receiverId];
 
 io.on("connection", (socket) => {
-  //it generate unique socket id for unique users
   const userId = socket.handshake.query.userId;
-  // console.log(socket.handshake.query);
-  if (userId) {
-    userSocketMap[userId] = socket.id;
+
+  if (!userId) {
+    console.log("User ID not provided, closing socket.");
+    socket.disconnect();
+    return;
   }
 
+  console.log(`User connected: ${userId} with socket ID: ${socket.id}`);
+  userSocketMap[userId] = socket.id;
+
+  // Send updated online users list
   io.emit("getOnlineUsers", Object.keys(userSocketMap));
-  // console.log(userSocketMap);
+
   socket.on("disconnect", () => {
-    if (userId) {
-      delete userSocketMap[userId];
-    }
+    console.log(`User disconnected: ${userId}`);
+    delete userSocketMap[userId];
     io.emit("getOnlineUsers", Object.keys(userSocketMap));
+  });
+
+  // Handle reconnection
+  socket.on("reconnect_attempt", () => {
+    console.log(`User ${userId} is trying to reconnect...`);
   });
 });
 

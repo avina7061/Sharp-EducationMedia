@@ -33,7 +33,7 @@ const Profile = () => {
   const followSetup = async () => {
     try {
       const res = await axios.post(
-        `https://sharp-educationmedia.onrender.com/api/v1/user/followorunfollow/${userId}`,
+        `http://localhost:8003/api/v1/user/followorunfollow/${userId}`,
         {},
         { withCredentials: true }
       );
@@ -56,7 +56,7 @@ const Profile = () => {
   const deletePostHandler = async () => {
     try {
       const res = await axios.delete(
-        `https://sharp-educationmedia.onrender.com/api/v1/post/delete/${postToDelete?._id}`,
+        `http://localhost:8003/api/v1/post/delete/${postToDelete?._id}`,
         { withCredentials: true }
       );
       if (res.data.success) {

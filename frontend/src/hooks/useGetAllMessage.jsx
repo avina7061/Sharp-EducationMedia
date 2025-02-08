@@ -11,7 +11,7 @@ const useGetAllMessage = () => {
     const fetchAllMessage = async () => {
       try {
         const res = await axios.get(
-          `https://sharp-educationmedia.onrender.com/api/v1/message/all/${selectedUser?._id}`,
+          `http://localhost:8003/api/v1/message/all/${selectedUser?._id}`,
           { withCredentials: true }
         );
 

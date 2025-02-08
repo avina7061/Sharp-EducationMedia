@@ -59,19 +59,16 @@ export const login = async (req, res) => {
       });
     }
 
-    const token = await jwt.sign({ userId: user._id }, process.env.SECRET_KEY, {
+    const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, {
       expiresIn: "1d",
     });
 
-    // populate each post if in the posts array
     const populatedPosts = await Promise.all(
       user.posts.map(async (postId) => {
         const post = await Post.findById(postId);
-        // Check if post exists and if the post has an author before comparing
-        if (post && post.author && post.author.equals(user._id)) {
-          return post;
-        }
-        return null;
+        return post && post.author && post.author.equals(user._id)
+          ? post
+          : null;
       })
     );
 
@@ -85,12 +82,13 @@ export const login = async (req, res) => {
       following: user.following,
       posts: populatedPosts,
     };
+
     return res
       .cookie("token", token, {
         httpOnly: true,
-        sameSite: process.env.NODE_ENV === "production" ? "None" : "Strict",
-        secure: process.env.NODE_ENV === "production", // Only set secure flag in production
-        maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day
+        secure: process.env.NODE_ENV === "production", // Secure for production
+        sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax", // Allow cross-origin in production
+        maxAge: 24 * 60 * 60 * 1000, // 1 day
       })
       .json({
         message: `Welcome back ${user.username}`,
@@ -99,8 +97,10 @@ export const login = async (req, res) => {
       });
   } catch (error) {
     console.log(error);
+    res.status(500).json({ message: "Server error", success: false });
   }
 };
+
 export const logout = async (_, res) => {
   try {
     return res.cookie("token", "", { maxAge: 0 }).json({
